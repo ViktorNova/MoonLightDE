@@ -12,6 +12,8 @@
 
 #include <QFrame>
 #include <LXQt/Settings>
+#include <XdgDesktopFile>
+#include <QSettings>
 
 class Dash : public QFrame {
     Q_OBJECT
@@ -34,12 +36,15 @@ protected:
 private slots:
     void onItemTrigerred();
     void handleMouseMoveEvent(QMouseEvent *event);
+    void handleRightClick(QMouseEvent* event);
+    void addFavorites(XdgDesktopFile* app);
+    void getFavorites();
 
 private:
     Ui::Dash m_ui;
     LxQt::Settings m_settings;
     // TODO: arreglar este churre
-
+    QSettings* qsettings;
     bool built;
 };
 

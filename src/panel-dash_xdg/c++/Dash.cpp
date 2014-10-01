@@ -9,6 +9,8 @@
 #include "AppButton.h"
 #include "GridLayoutHExpanding.h"
 #include "GridLayoutVExpanding.h"
+#include "qevent.h"
+#include "qdir.h"
 
 #include <qt5xdg/XdgDesktopFile>
 
@@ -21,12 +23,11 @@
 #include <QRect>
 #include <QLabel>
 #include <QTime>
-#include <QTextStream>
 
 #include <algorithm>
 #include <qt4/QtCore/qnamespace.h>
+#include <qt5/QtCore/qsettings.h>
 
-QTextStream cout(stdout);
 /**
  * As XdgDesktopFile doesn't provides the opperator < we must implement it here.
  */
@@ -43,6 +44,7 @@ Dash::Dash() : m_settings("panel-dash_xdg") {
     setWindowFlags(Qt::Popup);
     setFrameStyle(QFrame::NoFrame);
     built = false;
+    qsettings = new QSettings(qApp->organizationName(), qApp->applicationName(), this);
 }
 
 Dash::~Dash() {
@@ -83,17 +85,20 @@ void Dash::build() {
         AppButton *bttn = new AppButton(app, this);
 
         QLabel *label = new QLabel(app->name());
-        label->setAlignment(Qt::AlignHCenter);
-
+        
+        //Connecting AppButton with Dash slot
+        connect(bttn, &AppButton::pushFavorites, this, &Dash::addFavorites);
+        
         label->setWordWrap(true);
         label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
         label->setMaximumSize(boxSize.width(), 35);
+        label->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
         
         bttn->setFlat(true);
         bttn->setIconSize(iconSize);
         bttn->setMinimumSize(boxSize);
         bttn->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-
+        
         connect(bttn, &AppButton::released, this, &Dash::hide);
         
         //Layout for widget
@@ -147,9 +152,9 @@ void Dash::onItemTrigerred() {
 // taken from libqtxdg: XdgMenuWidget
 
 void Dash::handleMouseMoveEvent(QMouseEvent *event) {
-    //    if (!(event->buttons() & Qt::LeftButton))
-    //        return;
-    //
+        if (event->button() == Qt::RightButton)
+            return;
+    
     //    if ((event->pos() - mDragStartPosition).manhattanLength() < QApplication::startDragDistance())
     //        return;
     //
@@ -170,6 +175,7 @@ void Dash::handleMouseMoveEvent(QMouseEvent *event) {
     //    drag->exec(Qt::CopyAction | Qt::LinkAction);
 }
 
+
 void Dash::showEvent(QShowEvent * event) {
     qDebug() << "Show event";
 
@@ -181,3 +187,30 @@ void Dash::showEvent(QShowEvent * event) {
     m_ui.tabs->setCurrentWidget(m_ui.tabStart);
     show();
 }
+
+void Dash::addFavorites(XdgDesktopFile* app) {
+    const QString ruta ("/home/sigfried/.config/MoonLight Desktop Environment/favs");
+//    const QString directorio(app->name().toLower());
+    const QString appName(app->fileName());
+    QDir* dir = new QDir(ruta);
+    QFile* file = new QFile(appName);
+    qDebug() << file->fileName();
+    if (file->copy(dir->absolutePath() + "/" + app->name().toLower()) ) {
+        qDebug() << "Archivo copiado";
+    } else {
+        qDebug() << "Error 403";
+    }
+    
+//    if (dir->mkpath(directorio)) {
+//        qDebug() << "Directorio creado";
+//    } else {
+//        qDebug() << "Error LOL";
+//    }
+    
+//    if(app->save(ruta)) {
+//        qDebug() << dir->absolutePath();
+//        qDebug() << "Guardado";
+//    } else {
+//        qDebug() << "Paso algo :)";
+//    }
+} 
