@@ -17,12 +17,12 @@
 #    along with Moonlight Desktop Environment.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-project(panel)
+project(panel_dash)
 
 ## --------------------------------------------------------------
 ## Sources
 ## --------------------------------------------------------------
-file(GLOB ${PROJECT_NAME}_PUBLIC_HEADERS ${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/*.h)
+file(GLOB ${PROJECT_NAME}_PUBLIC_HEADERS ${CMAKE_SOURCE_DIR}/include/core/*.h)
 
 file(GLOB ${PROJECT_NAME}_SOURCES c++/*.cpp)
 
@@ -45,11 +45,19 @@ find_package(Qt5X11Extras   REQUIRED)
 ## CppMicroServices
 find_package(CppMicroServices NO_MODULE REQUIRED)
 include_directories(${CppMicroServices_INCLUDE_DIRS})
-message(STATUS ----------- ${CMAKE_CURRENT_SOURCE_DIR})
 
 ## LXQT -- depends on QT5XDG
 find_package(LXQT-QT5 REQUIRED )
 include(${LXQT_USE_FILE})
+
+## Menu-Cache
+find_package(PkgConfig)
+pkg_check_modules(MENU_CACHE REQUIRED
+    libmenu-cache>=0.3.3
+)
+include_directories(${MENU_CACHE_INCLUDE_DIRS})
+add_definitions(-DHAVE_MENU_CACHE=1)
+
 
 ## Inter-module dependencies
 set(${PROJECT_NAME}_DEPENDS )
@@ -62,7 +70,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(${CMAKE_BINARY_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 QT5_WRAP_UI(${PROJEC_NAME}_UI_HEADERS ${${PROJECT_NAME}_UIS})
 QT5_ADD_RESOURCES(${PROJEC_NAME}_QRC_SOURCES ${${PROJEC_NAME}_RESOURCES})
 
@@ -80,6 +87,7 @@ MoonLightDE_CreateModule(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
 target_link_libraries(moonlightDE-${PROJECT_NAME} 
     ${CppMicroServices_LIBRARIES}
     ${LXQT_LIBRARIES}
+    ${MENU_CACHE_LIBRARIES}
 
     Qt5::Core
     Qt5::Widgets
