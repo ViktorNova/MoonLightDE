@@ -26,6 +26,7 @@ protected slots:
 
 signals:
     void pushFavorites(XdgDesktopFile* app);
+    void removeFavorites(XdgDesktopFile* app);
     
 private:
     XdgDesktopFile* m_desktopFile;

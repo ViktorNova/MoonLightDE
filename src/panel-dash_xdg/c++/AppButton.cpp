@@ -17,8 +17,8 @@
 #include <QCursor>
 
 AppButton::AppButton(XdgDesktopFile* desktopFile, QWidget* parent) : QPushButton(parent), m_desktopFile(desktopFile) {
+    
     setToolTip(m_desktopFile->comment());
-
     //Creating menu
     menu = new QMenu(parent);
     //Add menu to button

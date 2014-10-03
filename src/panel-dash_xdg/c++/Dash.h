@@ -38,6 +38,7 @@ private slots:
     void handleMouseMoveEvent(QMouseEvent *event);
     void handleRightClick(QMouseEvent* event);
     void addFavorites(XdgDesktopFile* app);
+    void removeFavorites(XdgDesktopFile* app);
     void getFavorites();
 
 private:

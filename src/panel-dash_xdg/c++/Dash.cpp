@@ -45,6 +45,7 @@ Dash::Dash() : m_settings("panel-dash_xdg") {
     setFrameStyle(QFrame::NoFrame);
     built = false;
     qsettings = new QSettings(qApp->organizationName(), qApp->applicationName(), this);
+    getFavorites();
 }
 
 Dash::~Dash() {
@@ -59,17 +60,16 @@ void Dash::build() {
     const QSize iconSize(64, 64);
     const QSize boxSize(100, 100);
     const int maxColumnApps = m_ui.tabs->size().width() / (boxSize.width() + 32);
-    
     GridLayoutVExpanding* layoutApps = new GridLayoutVExpanding(maxColumnApps, m_ui.tabApps);
-    
+
     layoutApps->setSpacing(0);
     layoutApps->setMargin(16);
-    
+
     GridLayoutVExpanding* layoutSettings = new GridLayoutVExpanding(maxColumnApps, m_ui.tabSettings);
-    
+
     layoutSettings->setSpacing(0);
     layoutSettings->setMargin(16);
-    
+
     qDebug() << "Layouts init: " << time.elapsed();
     // Individual items are released inside the AppButton class
     QList<XdgDesktopFile*> appList = XdgDesktopFileCache::getAllFiles();
@@ -85,34 +85,34 @@ void Dash::build() {
         AppButton *bttn = new AppButton(app, this);
 
         QLabel *label = new QLabel(app->name());
-        
+
         //Connecting AppButton with Dash slot
         connect(bttn, &AppButton::pushFavorites, this, &Dash::addFavorites);
-        
+
         label->setWordWrap(true);
         label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
         label->setMaximumSize(boxSize.width(), 35);
         label->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-        
+
         bttn->setFlat(true);
         bttn->setIconSize(iconSize);
         bttn->setMinimumSize(boxSize);
         bttn->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-        
+
         connect(bttn, &AppButton::released, this, &Dash::hide);
-        
+
         //Layout for widget
-        QVBoxLayout* vBoxLayout = new QVBoxLayout();            
+        QVBoxLayout* vBoxLayout = new QVBoxLayout();
         vBoxLayout->addWidget(bttn);
         vBoxLayout->addWidget(label);
-        
+
         QString appCategories = app->value("Categories", "None").toString();
-        
+
         if (appCategories.contains("Settings", Qt::CaseInsensitive)) {
-            
+
             layoutSettings->addLayout(vBoxLayout);
         } else {
-            
+
             layoutApps->addLayout(vBoxLayout);
         }
 
@@ -121,13 +121,13 @@ void Dash::build() {
 
     qDebug() << "appcontainerSize" << m_ui.tabs->size();
 
-    m_ui.apps->setGeometry(0, 0, m_ui.scrollArea->size().width() - (layoutApps->spacing() * maxColumnApps) 
-                         , layoutApps->getCurrentRow() * boxSize.height());
+    m_ui.apps->setGeometry(0, 0, m_ui.scrollArea->size().width() - (layoutApps->spacing() * maxColumnApps)
+            , layoutApps->getCurrentRow() * boxSize.height());
     m_ui.apps->setLayout(layoutApps);
 
 
     m_ui.settings->setGeometry(0, 0, m_ui.scrollAreaSettings->size().width()
-                             , layoutApps->getCurrentRow() * boxSize.height());
+            , layoutApps->getCurrentRow() * boxSize.height());
     m_ui.settings->setLayout(layoutSettings);
 
 }
@@ -146,15 +146,12 @@ void Dash::onItemTrigerred() {
 }
 
 // taken from libqtxdg: XdgMenuWidget
-
-
-
 // taken from libqtxdg: XdgMenuWidget
 
 void Dash::handleMouseMoveEvent(QMouseEvent *event) {
-        if (event->button() == Qt::RightButton)
-            return;
-    
+    if (event->button() == Qt::RightButton)
+        return;
+
     //    if ((event->pos() - mDragStartPosition).manhattanLength() < QApplication::startDragDistance())
     //        return;
     //
@@ -175,7 +172,6 @@ void Dash::handleMouseMoveEvent(QMouseEvent *event) {
     //    drag->exec(Qt::CopyAction | Qt::LinkAction);
 }
 
-
 void Dash::showEvent(QShowEvent * event) {
     qDebug() << "Show event";
 
@@ -189,28 +185,97 @@ void Dash::showEvent(QShowEvent * event) {
 }
 
 void Dash::addFavorites(XdgDesktopFile* app) {
-    const QString ruta ("/home/sigfried/.config/MoonLight Desktop Environment/favs");
-//    const QString directorio(app->name().toLower());
+    const QString ruta("/home/sigfried/.config/MoonLight Desktop Environment/favs");
+    //    const QString directorio(app->name().toLower());
     const QString appName(app->fileName());
     QDir* dir = new QDir(ruta);
     QFile* file = new QFile(appName);
     qDebug() << file->fileName();
-    if (file->copy(dir->absolutePath() + "/" + app->name().toLower()) ) {
+    if (file->copy(dir->absolutePath() + "/" + app->name().toLower())) {
         qDebug() << "Archivo copiado";
     } else {
         qDebug() << "Error 403";
     }
-    
-//    if (dir->mkpath(directorio)) {
-//        qDebug() << "Directorio creado";
-//    } else {
-//        qDebug() << "Error LOL";
-//    }
-    
-//    if(app->save(ruta)) {
-//        qDebug() << dir->absolutePath();
-//        qDebug() << "Guardado";
-//    } else {
-//        qDebug() << "Paso algo :)";
-//    }
-} 
+
+    //    if (dir->mkpath(directorio)) {
+    //        qDebug() << "Directorio creado";
+    //    } else {
+    //        qDebug() << "Error LOL";
+    //    }
+
+    //    if(app->save(ruta)) {
+    //        qDebug() << dir->absolutePath();
+    //        qDebug() << "Guardado";
+    //    } else {
+    //        qDebug() << "Paso algo :)";
+    //    }
+}
+
+//Get all favorite apps in the directory and paint them on start widget
+void Dash::getFavorites() {
+
+    const QString ruta("/home/sigfried/.config/MoonLight Desktop Environment/favs");
+    QDir* favsDir = new QDir(ruta);
+
+    QFileInfoList list = favsDir->entryInfoList(QDir::Files, QDir::Name);
+    QList<XdgDesktopFile*> favAppList;
+
+    if (!list.empty()) {
+        qDebug() << "You shall not pass!!!!";
+
+        foreach(QFileInfo app, list) {
+            const QString cadena(app.filePath());
+            XdgDesktopFile* fav = XdgDesktopFileCache::getFile(cadena);
+            favAppList.append(fav);
+        }
+    }
+
+    //Rendering widget :P
+    const QSize iconSize(64, 64);
+    const QSize boxSize(80, 80);
+    const int maxColumnApps = m_ui.start->size().width() / (boxSize.width() + 32);
+    GridLayoutVExpanding* layoutFavs = new GridLayoutVExpanding(maxColumnApps, m_ui.start);
+
+    layoutFavs->setSpacing(0);
+    layoutFavs->setMargin(16);
+
+    // Individual items are released inside the AppButton class
+
+    foreach(XdgDesktopFile * app, favAppList) {
+        if (app->type() != XdgDesktopFile::ApplicationType) {
+            delete app;
+            continue;
+        }
+        AppButton* bttn = new AppButton(app, this);
+
+        QLabel* label = new QLabel(app->name());
+
+        //Connecting AppButton with Dash slot
+        //connect(bttn, &AppButton::pushFavorites, this, &Dash::addFavorites);
+
+        label->setWordWrap(true);
+        label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        label->setMaximumSize(boxSize.width(), 35);
+        label->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+
+        bttn->setFlat(true);
+        bttn->setIconSize(iconSize);
+        bttn->setMinimumSize(boxSize);
+        bttn->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
+        connect(bttn, &AppButton::released, this, &Dash::hide);
+
+        //Layout for widget
+        QVBoxLayout* vBoxLayout = new QVBoxLayout();
+        vBoxLayout->addWidget(bttn);
+        vBoxLayout->addWidget(label);
+
+        layoutFavs->addLayout(vBoxLayout);
+    }
+}
+
+//TODO: Remove favorite app from Dash->starWidget
+void Dash::removeFavorites(XdgDesktopFile* app) {
+
+
+}
