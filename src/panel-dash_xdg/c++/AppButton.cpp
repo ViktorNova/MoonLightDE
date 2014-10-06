@@ -37,6 +37,29 @@ AppButton::AppButton(XdgDesktopFile* desktopFile, QWidget* parent) : QPushButton
     setIcon(m_desktopFile->icon(XdgIcon::defaultApplicationIcon()));
 }
 
+AppButton::AppButton(XdgDesktopFile* desktopFile, bool remove, QWidget* parent) : QPushButton(parent), m_desktopFile(desktopFile) {
+    
+    if (remove) {
+        setToolTip(m_desktopFile->comment());
+        //Creating menu
+        menu = new QMenu(parent);
+        //Add menu to button
+        QAction* op1 = new QAction(this);
+
+        const QString t1("Eliminar de favoritos");
+
+        op1->setText(t1);
+        //Connecting QAction with AppButton slot
+        connect(op1, SIGNAL(triggered()), this, SLOT(removeFromFavorites()));
+
+        menu->addAction(op1);
+
+        XdgIcon::setThemeName("Razor-by-gibaalav");
+        setIcon(m_desktopFile->icon(XdgIcon::defaultApplicationIcon()));
+    }
+}
+
+
 AppButton::~AppButton() {
     delete m_desktopFile;
 }
@@ -53,6 +76,10 @@ void AppButton::mouseReleaseEvent(QMouseEvent* event) {
 
 void AppButton::handleMenuFavorites() {
     emit pushFavorites(m_desktopFile);
+}
+
+void AppButton::removeFromFavorites() {
+    emit removeFavorites(m_desktopFile);
 }
 
 

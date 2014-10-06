@@ -26,6 +26,7 @@
 #include "GridLayoutVExpanding.h"
 #include "qevent.h"
 #include "qdir.h"
+#include "core/ModuleSettings.h"
 
 #include <qt5xdg/XdgDesktopFile>
 
@@ -38,11 +39,12 @@
 #include <QRect>
 #include <QLabel>
 #include <QTime>
+#include <usGetModuleContext.h>
 
- #include <QThread>
+#include <QThread>
 
 #include <algorithm>
-
+#include <CppMicroServices/usModuleContext.h>
 
 /**
  * As XdgDesktopFile doesn't provides the opperator < we must implement it here.
@@ -70,7 +72,7 @@ Dash::~Dash() {
 void Dash::build() {
     QTime time;
     time.start();
-
+    
     const QRect screen = qApp->desktop()->screenGeometry();
 
     const QSize iconSize(64, 64);
@@ -131,7 +133,6 @@ void Dash::build() {
 
             layoutApps->addLayout(vBoxLayout);
         }
-
     }
     qDebug() << "Layouts built: " << time.elapsed();
 
@@ -201,51 +202,56 @@ void Dash::showEvent(QShowEvent * event) {
 }
 
 void Dash::addFavorites(XdgDesktopFile* app) {
-    const QString ruta("/home/sigfried/.config/MoonLight Desktop Environment/favs");
-    //    const QString directorio(app->name().toLower());
+    
+    us::ModuleContext* context = us::GetModuleContext();
+    const QString ruta(ModuleSettings::getModuleDataLocation(context));
+
     const QString appName(app->fileName());
     QDir* dir = new QDir(ruta);
+    dir->mkdir("favs");
     QFile* file = new QFile(appName);
-    qDebug() << file->fileName();
-    if (file->copy(dir->absolutePath() + "/" + app->name().toLower())) {
+    if (file->copy(dir->absolutePath() + "/favs/" + app->name().toLower())) {
         qDebug() << "Archivo copiado";
     } else {
-        qDebug() << "Error 403";
+        qDebug() << "Error";
     }
-
-    //    if (dir->mkpath(directorio)) {
-    //        qDebug() << "Directorio creado";
-    //    } else {
-    //        qDebug() << "Error LOL";
-    //    }
-
-    //    if(app->save(ruta)) {
-    //        qDebug() << dir->absolutePath();
-    //        qDebug() << "Guardado";
-    //    } else {
-    //        qDebug() << "Paso algo :)";
-    //    }
 }
 
 //Get all favorite apps in the directory and paint them on start widget
 void Dash::getFavorites() {
-
-    const QString ruta("/home/sigfried/.config/MoonLight Desktop Environment/favs");
+    
+    us::ModuleContext* context = us::GetModuleContext();
+    const QString ruta(ModuleSettings::getModuleDataLocation(context) + "/favs");
+    
+    qDebug() << "Ruta: " << endl;
+    qDebug() << ruta;
     QDir* favsDir = new QDir(ruta);
 
     QFileInfoList list = favsDir->entryInfoList(QDir::Files, QDir::Name);
     QList<XdgDesktopFile*> favAppList;
 
     if (!list.empty()) {
-        qDebug() << "You shall not pass!!!!";
 
         foreach(QFileInfo app, list) {
             const QString cadena(app.filePath());
+            //You have to specify the absolute path to the file, otherwise it wont work
             XdgDesktopFile* fav = XdgDesktopFileCache::getFile(cadena);
             favAppList.append(fav);
         }
     }
+    //Call method putFavorites
+    putFavorites(favAppList);
+}
 
+//jfsanchez@estudiantes.uci.cu
+
+void Dash::hideEvent(QHideEvent *event) {
+    qDebug() << "hideEvent()";
+    QThread::msleep(1);
+    QFrame::hideEvent(event);
+}
+
+void Dash::putFavorites(QList<XdgDesktopFile*> favAppList) {
     //Rendering widget :P
     const QSize iconSize(64, 64);
     const QSize boxSize(80, 80);
@@ -257,17 +263,17 @@ void Dash::getFavorites() {
 
     // Individual items are released inside the AppButton class
 
-    foreach(XdgDesktopFile * app, favAppList) {
+    foreach(XdgDesktopFile* app, favAppList) {
         if (app->type() != XdgDesktopFile::ApplicationType) {
             delete app;
             continue;
         }
-        AppButton* bttn = new AppButton(app, this);
+        AppButton* bttn = new AppButton(app, true, this);
 
         QLabel* label = new QLabel(app->name());
 
         //Connecting AppButton with Dash slot
-        //connect(bttn, &AppButton::pushFavorites, this, &Dash::addFavorites);
+        connect(bttn, &AppButton::removeFavorites, this, &Dash::removeFavorites);
 
         label->setWordWrap(true);
         label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
@@ -290,17 +296,25 @@ void Dash::getFavorites() {
     }
 }
 
-//TODO: Remove favorite app from Dash->starWidget
+//TODO: Dinamically update the start widget showing|unshowing the favorites
 void Dash::removeFavorites(XdgDesktopFile* app) {
-}
+    
+    qDebug() << "Certainly YOU SHALL NOT PASS!!!!";
+    us::ModuleContext* context = us::GetModuleContext();
+    const QString ruta(ModuleSettings::getModuleDataLocation(context) + "/favs");
+    
+    QDir* favsDir = new QDir(ruta);
 
+    QFileInfoList list = favsDir->entryInfoList(QDir::Files, QDir::Name);
 
-
-//jfsanchez@estudiantes.uci.cu
-
-void Dash::hideEvent(QHideEvent *event)
-{
-    qDebug() << "hideEvent()";
-    QThread::msleep(1);
-    QFrame::hideEvent(event);
+    foreach(QFileInfo file, list) {
+//        qDebug() << file.fileName();
+//        qDebug() << app->name();
+        if(file.fileName() == app->name().toLower()) {
+            qDebug() << "You should buy a pet :P";
+            const QString ruta(app->fileName());
+            QFile* archive = new QFile(ruta);
+            archive->remove();
+        }
+    }
 }

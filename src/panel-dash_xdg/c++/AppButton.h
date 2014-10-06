@@ -16,6 +16,7 @@ class AppButton : public QPushButton {
     Q_OBJECT
 public:
     AppButton(XdgDesktopFile* item, QWidget* parent = 0);
+    AppButton(XdgDesktopFile* item, bool remove, QWidget* parent = 0);
     virtual ~AppButton();
     void mouseReleaseEvent(QMouseEvent* event);
 
@@ -23,6 +24,7 @@ protected slots:
     void addFavoritesAction();
     void rightClickAction();
     void handleMenuFavorites();
+    void removeFromFavorites();
 
 signals:
     void pushFavorites(XdgDesktopFile* app);

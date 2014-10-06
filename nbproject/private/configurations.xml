@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="94">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="." name="0">
+      <df name="build">
+        <df name="bin">
+        </df>
+        <df name="CMakeFiles">
+          <df name="2.8.12.2">
+            <df name="CompilerIdC">
+              <in>CMakeCCompilerId.c</in>
+            </df>
+            <df name="CompilerIdCXX">
+              <in>CMakeCXXCompilerId.cpp</in>
+            </df>
+          </df>
+          <df name="CMakeTmp">
+          </df>
+        </df>
+        <df name="lib">
+        </df>
+        <df name="share">
+          <df name="moonlightDE">
+            <df name="descriptors">
+            </df>
+          </df>
+        </df>
+        <df name="src">
+          <df name="core">
+            <df name="CMakeFiles">
+              <df name="moonlightDE-core.dir">
+                <df name="c++">
+                </df>
+              </df>
+              <df name="moonlightDE-core_automoc.dir">
+              </df>
+            </df>
+            <in>Core_init.cpp</in>
+            <in>MoonLightDECoreConfig.h</in>
+            <in>moc_Controller.cpp</in>
+            <in>moc_CoreConfigurationUI.cpp</in>
+            <in>moc_ModuleModel.cpp</in>
+            <in>moonlightDE-core_automoc.cpp</in>
+            <in>ui_CoreConfigurationUI.h</in>
+          </df>
+          <df name="panel">
+            <df name="CMakeFiles">
+              <df name="moonlightDE-panel.dir">
+                <df name="c++">
+                </df>
+              </df>
+              <df name="moonlightDE-panel_automoc.dir">
+              </df>
+            </df>
+            <in>moc_Panel.cpp</in>
+            <in>moonlightDE-panel_automoc.cpp</in>
+            <in>panel_init.cpp</in>
+            <in>ui_panel.h</in>
+          </df>
+          <df name="panel-dash_xdg">
+            <df name="CMakeFiles">
+              <df name="moonlightDE-panel_dash_xdg.dir">
+                <df name="c++">
+                </df>
+              </df>
+              <df name="moonlightDE-panel_dash_xdg_automoc.dir">
+              </df>
+            </df>
+            <in>moc_AppButton.cpp</in>
+            <in>moc_Dash.cpp</in>
+            <in>moc_GridLayoutHExpanding.cpp</in>
+            <in>moc_GridLayoutVExpanding.cpp</in>
+            <in>moonlightDE-panel_dash_xdg_automoc.cpp</in>
+            <in>panel_dash_xdg_init.cpp</in>
+            <in>ui_Dash.h</in>
+          </df>
+        </df>
+      </df>
+      <df name="cmake">
+      </df>
+      <df name="doc">
+        <df name="design">
+          <df name="core">
+          </df>
+        </df>
+        <df name="notifications">
+        </df>
+      </df>
+      <df name="include">
+        <df name="actions_registry">
+          <in>ICommandProvider.h</in>
+        </df>
+        <df name="core">
+          <in>ICore.h</in>
+          <in>IQt5.h</in>
+          <in>ModuleSettings.h</in>
+        </df>
+        <df name="keyboard-shortcuts">
+          <in>IKeyboardShortCutsService.h</in>
+          <in>shortcut.h</in>
+        </df>
+        <df name="notifications">
+          <in>IFeedbacker.h</in>
+          <in>INotificationsService.h</in>
+        </df>
+        <df name="panel">
+          <in>IPanel.h</in>
+        </df>
+        <df name="sidepanel">
+          <in>ISidePanel.h</in>
+        </df>
+      </df>
+      <df name="src">
+        <df name="actions_registry">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>providers.cpp</in>
+            <in>providers.h</in>
+            <in>yamlparser.cpp</in>
+            <in>yamlparser.h</in>
+          </df>
+        </df>
+        <df name="core">
+          <df name="c++">
+            <in>Controller.cpp</in>
+            <in>Controller.h</in>
+            <in>CoreConfigurationUI.cpp</in>
+            <in>CoreConfigurationUI.h</in>
+            <in>ModuleManager.cpp</in>
+            <in>ModuleManager.h</in>
+            <in>ModuleModel.cpp</in>
+            <in>ModuleModel.h</in>
+            <in>ModuleSettings.cpp</in>
+            <in>MoonLightDECoreConfig.h.in</in>
+            <in>main.cpp</in>
+          </df>
+          <df name="ui">
+          </df>
+        </df>
+        <df name="file-manager">
+          <df name="libfm-qt">
+            <in>appchoosercombobox.cpp</in>
+            <in>appchoosercombobox.h</in>
+            <in>appchooserdialog.cpp</in>
+            <in>appchooserdialog.h</in>
+            <in>applaunchcontext.cpp</in>
+            <in>applaunchcontext.h</in>
+            <in>appmenuview.cpp</in>
+            <in>appmenuview.h</in>
+            <in>appmenuview_p.h</in>
+            <in>bookmarkaction.cpp</in>
+            <in>bookmarkaction.h</in>
+            <in>browsehistory.cpp</in>
+            <in>browsehistory.h</in>
+            <in>cachedfoldermodel.cpp</in>
+            <in>cachedfoldermodel.h</in>
+            <in>colorbutton.cpp</in>
+            <in>colorbutton.h</in>
+            <in>dirtreemodel.cpp</in>
+            <in>dirtreemodel.h</in>
+            <in>dirtreemodelitem.cpp</in>
+            <in>dirtreemodelitem.h</in>
+            <in>dirtreeview.cpp</in>
+            <in>dirtreeview.h</in>
+            <in>dndactionmenu.cpp</in>
+            <in>dndactionmenu.h</in>
+            <in>dnddest.cpp</in>
+            <in>dnddest.h</in>
+            <in>editbookmarksdialog.cpp</in>
+            <in>editbookmarksdialog.h</in>
+            <in>execfiledialog.cpp</in>
+            <in>execfiledialog_p.h</in>
+            <in>filelauncher.cpp</in>
+            <in>filelauncher.h</in>
+            <in>filemenu.cpp</in>
+            <in>filemenu.h</in>
+            <in>filemenu_p.h</in>
+            <in>fileoperation.cpp</in>
+            <in>fileoperation.h</in>
+            <in>fileoperationdialog.cpp</in>
+            <in>fileoperationdialog.h</in>
+            <in>filepropsdialog.cpp</in>
+            <in>filepropsdialog.h</in>
+            <in>folderitemdelegate.cpp</in>
+            <in>folderitemdelegate.h</in>
+            <in>foldermenu.cpp</in>
+            <in>foldermenu.h</in>
+            <in>foldermodel.cpp</in>
+            <in>foldermodel.h</in>
+            <in>foldermodelitem.cpp</in>
+            <in>foldermodelitem.h</in>
+            <in>folderview.cpp</in>
+            <in>folderview.h</in>
+            <in>folderview_p.h</in>
+            <in>fontbutton.cpp</in>
+            <in>fontbutton.h</in>
+            <in>icontheme.cpp</in>
+            <in>icontheme.h</in>
+            <in>libfm-qt.pc.in</in>
+            <in>libfmqt.cpp</in>
+            <in>libfmqt.h</in>
+            <in>libfmqtglobals.h</in>
+            <in>mountoperation.cpp</in>
+            <in>mountoperation.h</in>
+            <in>mountoperationpassworddialog.cpp</in>
+            <in>mountoperationpassworddialog_p.h</in>
+            <in>mountoperationquestiondialog.cpp</in>
+            <in>mountoperationquestiondialog_p.h</in>
+            <in>path.cpp</in>
+            <in>path.h</in>
+            <in>pathedit.cpp</in>
+            <in>pathedit.h</in>
+            <in>placesmodel.cpp</in>
+            <in>placesmodel.h</in>
+            <in>placesmodelitem.cpp</in>
+            <in>placesmodelitem.h</in>
+            <in>placesview.cpp</in>
+            <in>placesview.h</in>
+            <in>proxyfoldermodel.cpp</in>
+            <in>proxyfoldermodel.h</in>
+            <in>renamedialog.cpp</in>
+            <in>renamedialog.h</in>
+            <in>sidepane.cpp</in>
+            <in>sidepane.h</in>
+            <in>thumbnailloader.cpp</in>
+            <in>thumbnailloader.h</in>
+            <in>utilities.cpp</in>
+            <in>utilities.h</in>
+            <in>utilities_p.h</in>
+          </df>
+          <df name="pcmanfm">
+            <in>Activator.cpp</in>
+            <in>application.cpp</in>
+            <in>application.h</in>
+            <in>autorundialog.cpp</in>
+            <in>autorundialog.h</in>
+            <in>desktopitemdelegate.cpp</in>
+            <in>desktopitemdelegate.h</in>
+            <in>desktoppreferencesdialog.cpp</in>
+            <in>desktoppreferencesdialog.h</in>
+            <in>desktopwindow.cpp</in>
+            <in>desktopwindow.h</in>
+            <in>launcher.cpp</in>
+            <in>launcher.h</in>
+            <in>mainwindow.cpp</in>
+            <in>mainwindow.h</in>
+            <in>pcmanfm-qt-desktop-pref.desktop.in</in>
+            <in>pcmanfm-qt.desktop.in</in>
+            <in>pcmanfm.cpp</in>
+            <in>preferencesdialog.cpp</in>
+            <in>preferencesdialog.h</in>
+            <in>settings.cpp</in>
+            <in>settings.h</in>
+            <in>tabpage.cpp</in>
+            <in>tabpage.h</in>
+            <in>view.cpp</in>
+            <in>view.h</in>
+          </df>
+          <in>Doxyfile.in</in>
+        </df>
+        <df name="keyboard-shortcuts">
+          <df name="client">
+            <in>action.cpp</in>
+            <in>action.h</in>
+            <in>action_p.h</in>
+            <in>client.cpp</in>
+            <in>client.h</in>
+            <in>client_adaptor.cpp</in>
+            <in>client_adaptor.h</in>
+            <in>client_p.h</in>
+            <in>lxqt-globalkeys.h</in>
+          </df>
+          <df name="cmake">
+            <in>lxqt_globalkeys-config.cmake.in</in>
+            <in>lxqt_globalkeys_ui-config.cmake.in</in>
+          </df>
+          <df name="config">
+            <df name="translations">
+            </df>
+            <in>actions.cpp</in>
+            <in>actions.h</in>
+            <in>default_model.cpp</in>
+            <in>default_model.h</in>
+            <in>edit_action_dialog.cpp</in>
+            <in>edit_action_dialog.h</in>
+            <in>lxqt-config-globalkeyshortcuts.desktop.in</in>
+            <in>main.cpp</in>
+            <in>main_window.cpp</in>
+            <in>main_window.h</in>
+            <in>shortcut_delegate.cpp</in>
+            <in>shortcut_delegate.h</in>
+            <in>shortcut_selector.cpp</in>
+            <in>shortcut_selector.h</in>
+          </df>
+          <df name="daemon">
+            <in>Activator.cpp</in>
+            <in>base_action.cpp</in>
+            <in>base_action.h</in>
+            <in>client_action.cpp</in>
+            <in>client_action.h</in>
+            <in>client_proxy.cpp</in>
+            <in>client_proxy.h</in>
+            <in>command_action.cpp</in>
+            <in>command_action.h</in>
+            <in>core.cpp</in>
+            <in>core.h</in>
+            <in>daemon_adaptor.cpp</in>
+            <in>daemon_adaptor.h</in>
+            <in>fixed_timeout.h</in>
+            <in>inner_action.cpp</in>
+            <in>inner_action.h</in>
+            <in>log_target.cpp</in>
+            <in>log_target.h</in>
+            <in>meta_types.cpp</in>
+            <in>meta_types.h</in>
+            <in>method_action.cpp</in>
+            <in>method_action.h</in>
+            <in>mutex.cpp</in>
+            <in>mutex.h</in>
+            <in>native_adaptor.cpp</in>
+            <in>native_adaptor.h</in>
+            <in>pipe_utils.cpp</in>
+            <in>pipe_utils.h</in>
+            <in>string_utils.cpp</in>
+            <in>string_utils.h</in>
+          </df>
+          <df name="ui">
+            <in>shortcut_selector.cpp</in>
+            <in>shortcut_selector.h</in>
+          </df>
+        </df>
+        <df name="notifications">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>Feedbacker.cpp</in>
+            <in>Feedbacker.h</in>
+            <in>NotificationBox.cpp</in>
+            <in>NotificationBox.h</in>
+            <in>NotificationMemo.cpp</in>
+            <in>NotificationMemo.h</in>
+            <in>NotificationsDbusInterface.cpp</in>
+            <in>NotificationsDbusInterface.h</in>
+            <in>NotificationsPanel.cpp</in>
+            <in>NotificationsPanel.h</in>
+            <in>StakedNotice.cpp</in>
+            <in>StakedNotice.h</in>
+          </df>
+          <df name="config">
+            <in>advancedsettings.cpp</in>
+            <in>basicsettings.cpp</in>
+            <in>main.cpp</in>
+            <in>mainwindow.cpp</in>
+          </df>
+          <df name="res">
+          </df>
+          <df name="src">
+            <in>Activator.cpp</in>
+            <in>notification.cpp</in>
+            <in>notificationarea.cpp</in>
+            <in>notificationlayout.cpp</in>
+            <in>notificationwidgets.cpp</in>
+            <in>notifyd.cpp</in>
+          </df>
+          <df name="test">
+            <in>main.cpp</in>
+            <in>mainwindow.cpp</in>
+          </df>
+          <df name="ui">
+          </df>
+        </df>
+        <df name="panel">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>Panel.cpp</in>
+            <in>Panel.h</in>
+            <in>StartButton.cpp</in>
+            <in>StartButton.h</in>
+          </df>
+          <df name="ui">
+          </df>
+        </df>
+        <df name="panel-clasic-menu">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>ClasicMenuFactory.cpp</in>
+            <in>ClasicMenuFactory.h</in>
+            <in>xdgcachedmenu.cpp</in>
+            <in>xdgcachedmenu.h</in>
+          </df>
+        </df>
+        <df name="panel-clock">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>CalendarWidget.cpp</in>
+            <in>CalendarWidget.h</in>
+            <in>calendar_utils.cpp</in>
+            <in>calendar_utils.h</in>
+            <in>lxqtclock.cpp</in>
+            <in>lxqtclock.h</in>
+            <in>lxqtclockconfiguration.cpp</in>
+            <in>lxqtclockconfiguration.h</in>
+          </df>
+          <df name="cmake">
+          </df>
+          <df name="ui">
+          </df>
+        </df>
+        <df name="panel-dash">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>AppButton.cpp</in>
+            <in>AppButton.h</in>
+            <in>ClasicMenuFactory.cpp</in>
+            <in>ClasicMenuFactory.h</in>
+            <in>Dash.cpp</in>
+            <in>Dash.h</in>
+            <in>DashFactory.cpp</in>
+            <in>DashFactory.h</in>
+          </df>
+          <df name="ui">
+          </df>
+          <in>xdgcachedmenu.cpp</in>
+          <in>xdgcachedmenu.h</in>
+        </df>
+        <df name="panel-dash_xdg">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>AppButton.cpp</in>
+            <in>AppButton.h</in>
+            <in>Dash.cpp</in>
+            <in>Dash.h</in>
+            <in>DashFactory.cpp</in>
+            <in>DashFactory.h</in>
+            <in>GridLayoutHExpanding.cpp</in>
+            <in>GridLayoutHExpanding.h</in>
+            <in>GridLayoutVExpanding.cpp</in>
+            <in>GridLayoutVExpanding.h</in>
+          </df>
+          <df name="ui">
+          </df>
+        </df>
+        <df name="panel-menu">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>lxqtmainmenu.cpp</in>
+            <in>lxqtmainmenu.h</in>
+            <in>lxqtmainmenuconfiguration.cpp</in>
+            <in>lxqtmainmenuconfiguration.h</in>
+            <in>menustyle.cpp</in>
+            <in>menustyle.h</in>
+            <in>xdgcachedmenu.cpp</in>
+            <in>xdgcachedmenu.h</in>
+          </df>
+          <df name="ui">
+          </df>
+        </df>
+        <df name="panel-quicklauchers">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>lxqtquicklaunch.cpp</in>
+            <in>lxqtquicklaunch.h</in>
+            <in>quicklaunchaction.cpp</in>
+            <in>quicklaunchaction.h</in>
+            <in>quicklaunchbutton.cpp</in>
+            <in>quicklaunchbutton.h</in>
+          </df>
+        </df>
+        <df name="panel-systray">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>fixx11h.h</in>
+            <in>lxqttray.cpp</in>
+            <in>lxqttray.h</in>
+            <in>trayicon.cpp</in>
+            <in>trayicon.h</in>
+          </df>
+        </df>
+        <df name="panel-taskbar">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>fixx11h.h</in>
+            <in>lxqttaskbar.cpp</in>
+            <in>lxqttaskbar.h</in>
+            <in>lxqttaskbarconfiguration.cpp</in>
+            <in>lxqttaskbarconfiguration.h</in>
+            <in>lxqttaskbutton.cpp</in>
+            <in>lxqttaskbutton.h</in>
+          </df>
+          <df name="ui">
+          </df>
+        </df>
+        <df name="runner">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>commanditemmodel.cpp</in>
+            <in>commanditemmodel.h</in>
+            <in>configuredialog.cpp</in>
+            <in>configuredialog.h</in>
+            <in>dialog.cpp</in>
+            <in>dialog.h</in>
+            <in>widgets.cpp</in>
+            <in>widgets.h</in>
+          </df>
+          <df name="ui">
+          </df>
+        </df>
+        <df name="sidepanel">
+          <df name="c++">
+            <in>Activator.cpp</in>
+            <in>SidePanel.cpp</in>
+            <in>SidePanel.h</in>
+          </df>
+        </df>
+      </df>
+      <df name="test">
+        <df name="core">
+          <df name="test_driver">
+            <in>Activator.cpp</in>
+            <in>TestICore.cpp</in>
+            <in>TestICore.h</in>
+            <in>descriptor.in</in>
+          </df>
+          <df name="test_module">
+            <in>Activator.cpp</in>
+            <in>descriptor.in</in>
+          </df>
+        </df>
+      </df>
+      <df name="thirdParty">
+        <df name="cmake">
+        </df>
+        <df name="CppMicroServices">
+        </df>
+        <df name="liblxqt">
+        </df>
+        <df name="libqtxdg">
+        </df>
+      </df>
+    </df>
+  </logicalFolder>
+  <projectmakefile>build/Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <platform>2</platform>
+      </toolsSet>
+      <compile>
+        <compiledirpicklist>
+          <compiledirpicklistitem>.</compiledirpicklistitem>
+          <compiledirpicklistitem>${AUTO_FOLDER}</compiledirpicklistitem>
+        </compiledirpicklist>
+        <compiledir>${AUTO_FOLDER}</compiledir>
+        <compilecommandpicklist>
+          <compilecommandpicklistitem>${MAKE} ${ITEM_NAME}.o</compilecommandpicklistitem>
+          <compilecommandpicklistitem>${AUTO_COMPILE}</compilecommandpicklistitem>
+        </compilecommandpicklist>
+        <compilecommand>${AUTO_COMPILE}</compilecommand>
+      </compile>
+      <dbx_gdbdebugger version="1">
+        <gdb_pathmaps>
+        </gdb_pathmaps>
+        <gdb_interceptlist>
+          <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
+        </gdb_interceptlist>
+        <gdb_options>
+          <DebugOptions>
+          </DebugOptions>
+        </gdb_options>
+        <gdb_buildfirst gdb_buildfirst_overriden="false" gdb_buildfirst_old="false"/>
+      </dbx_gdbdebugger>
+      <nativedebugger version="1">
+        <engine>gdb</engine>
+      </nativedebugger>
+      <runprofile version="9">
+        <runcommandpicklist>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" </runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"-d share/moonlightDE/descriptors/ -m lib/</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -d share/moonlightDE/descriptors/ -m lib/</runcommandpicklistitem>
+        </runcommandpicklist>
+        <runcommand>"${OUTPUT_PATH}" -d share/moonlightDE/descriptors/ -m lib/</runcommand>
+        <rundir>build</rundir>
+        <buildfirst>false</buildfirst>
+        <terminal-type>0</terminal-type>
+        <remove-instrumentation>0</remove-instrumentation>
+        <environment>
+        </environment>
+      </runprofile>
+    </conf>
+  </confs>
+</configurationDescriptor>

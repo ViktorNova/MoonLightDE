@@ -52,13 +52,15 @@ protected:
 
 private slots:
     void onItemTrigerred();
-    void handleMouseMoveEvent(QMouseEvent *event);
+    void handleMouseMoveEvent(QMouseEvent* event);
     void handleRightClick(QMouseEvent* event);
     void addFavorites(XdgDesktopFile* app);
     void removeFavorites(XdgDesktopFile* app);
     void getFavorites();
 
 private:
+    //Take a list of XdgDesktopFiles and put it on Dash->start
+    void putFavorites(QList<XdgDesktopFile*> favAppList);
     Ui::Dash m_ui;
     LxQt::Settings m_settings;
     // TODO: arreglar este churre
