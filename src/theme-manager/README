@@ -1,0 +1,10 @@
+Moonlight Desktop Environment Theme manager.
+====================================================
+Allows to define:
+- Icon theme.
+- QSS per module.
+
+
+Depends:
+- libqt5xdg
+- liblxqt
