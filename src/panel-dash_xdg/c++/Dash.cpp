@@ -95,14 +95,24 @@ void Dash::build() {
     //    qSort(appList.begin(), appList.end());
     qDebug() << "XdgDesktopFile lockup: " << time.elapsed();
 
+    QVector<QString> appVector(0);
+    
     foreach(XdgDesktopFile * app, appList) {
         if (app->type() != XdgDesktopFile::ApplicationType) {
             delete app;
             continue;
         }
+        
+        if ( appVector.contains(app->name()) )
+            continue;
+        else
+            appVector.append(app->name());
+        
         AppButton *bttn = new AppButton(app, this);
 
         QLabel *label = new QLabel(app->name());
+        
+        qDebug() << "App Name: " << app->name();
 
         //Connecting AppButton with Dash slot
         connect(bttn, &AppButton::pushFavorites, this, &Dash::addFavorites);
