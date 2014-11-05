@@ -28,10 +28,14 @@
 #include <QUrl>
 #include <QString>
 #include <QWidget>
+#include <QAction>
+#include <QObject>
+#include <QActionGroup>
 #include <QAbstractItemView>
 #include <QFileSystemModel>
 
-class FolderController {
+class FolderController : public QObject {
+    Q_OBJECT
 public:
     FolderController();
     FolderController(const FolderController& orig);
@@ -55,6 +59,18 @@ public:
      */
     QWidget* GetView() const;
 
+public slots:
+    void UpdateWidgetActions();
+    
+    // File Operations
+    void OnOpen();
+    void OnNew();
+    void OnCopy();
+    void OnCut();
+    void OnPaste();
+    void OnRemove();
+    void OnShowProperties();
+    
 protected:
     /* Description: Build a model for the given scheme. The models are taken 
      * from the models factories that were exported as services.
@@ -69,6 +85,10 @@ private:
     QStringList mCurrentModelSupportedSchemes;
     QAbstractItemView * mFolderView;
     QString mFolderViewName;
+    
+    // Default Actions
+    QAction *mOpen, *mNew, *mCopy, *mCut, *mPaste, *mRemove, *mProperties;
+    QActionGroup *mFileOpsGroup;
 };
 
 #endif	/* FOLDERCONTROLLER_H */

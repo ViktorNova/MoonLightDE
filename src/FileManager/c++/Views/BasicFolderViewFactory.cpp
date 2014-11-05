@@ -1,8 +1,22 @@
-/* 
- * File:   BasicFolderViewFactory.cpp
- * Author: alexis
+/*
+ * Copyright (C) 2014 Moonlight Desktop Environment Team
+ *  Authors:
+ *      Alexis López Zubieta <azubieta@uci.cu>
  * 
- * Created on 1 de noviembre de 2014, 13:55
+ * This file is part of Moonlight Desktop Environment.
+ *
+ * Moonlight Desktop Environment is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Moonlight Desktop Environment is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Moonlight Desktop Environment. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "BasicFolderViewFactory.h"
@@ -26,7 +40,7 @@ QAbstractItemView* BasicFolderViewFactory::GetView(QString name) {
         view->setSpacing(20);
         view->setIconSize(QSize(48, 48));
         
-        // TODO: Implement an item delegate to give an apropiated size to the
+        // TODO: Implement an item delegate to give a correct size to the
         //  items.
         view->setUniformItemSizes(true);
         view->setWrapping(true);
