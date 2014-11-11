@@ -22,53 +22,33 @@
 #ifndef TASK_H
 #define	TASK_H
 
-#include <QRunnable>
+#include <QObject>
+#include <QString>
 
 namespace FileManager {
 
-    class Task : public QRunnable {
+    class Task {
         friend class Worker;
     public:
         virtual int GetId() const = 0;
-
-        virtual void Cancel() = 0;
-
-        virtual bool IsCanceled() = 0;
-
-        virtual bool IsFinished() = 0;
-
-        virtual bool IsPaused() = 0;
-
+        virtual QString GetDescription() = 0;
         virtual bool IsRunning() = 0;
 
-        virtual bool IsStarted() = 0;
+    public slots:
+        virtual void Stop() = 0;
 
-        virtual void Pause() = 0;
+        virtual void Start() = 0;
 
-        virtual int ProgressMaximun() = 0;
+    signals:
+        void started();
+        void stopped();
 
-        virtual int ProgressMinimun() = 0;
-
-        virtual QString ProgressText() = 0;
-
-        virtual QString ProgressRatio() = 0;
-
-        virtual int ProgressValue() = 0;
-
-        virtual void Resume() = 0;
-
-        virtual void run() = 0;
-
-        virtual void SetPaused(int bool_pause) = 0;
-
-        virtual void TogglePaused() = 0;
-
-        virtual void WaitForFinished() = 0;
 
     protected:
         virtual void SetId(int) = 0;
 
     };
-}
 
+}
+Q_DECLARE_INTERFACE(FileManager::Task, "org.moonlightde.FileManager.Task")
 #endif	/* TASK_H */

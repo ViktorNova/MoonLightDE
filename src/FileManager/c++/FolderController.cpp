@@ -20,21 +20,32 @@
  */
 
 #include "FolderController.h"
+#include "ChoseApplicationController.h"
 
 #include "FileManager/IFileSystemModelFactory.h"
 #include "FileManager/IFolderViewFactory.h"
+#include "LocalFileSystem/CopyTask.h"
 
 #include <usModuleContext.h>
 #include <usServiceReference.h>
 #include <usGetModuleContext.h>
 
 #include <Qt>
+#include <QUrl>
 #include <QLabel>
 #include <QListView>
 #include <QFileInfo>
+#include <QMimeData>
 #include <QAction>
+#include <QClipboard>
+#include <QApplication>
 #include <QKeySequence>
 #include <QFileSystemModel>
+#include <QDesktopServices>
+#include <QAbstractItemModel>
+#include <QFile>
+#include <QMimeData>
+
 #include <QDebug>
 
 FolderController::FolderController() : mView(NULL), mCurrentModel(NULL), mFolderView(NULL) {
@@ -74,6 +85,11 @@ FolderController::FolderController() : mView(NULL), mCurrentModel(NULL), mFolder
     mProperties = new QAction(tr("Properties"), this);
     mProperties->setShortcut(QKeySequence(Qt::ALT + Qt::Key_Return));
     connect(mProperties, SIGNAL(triggered()), this, SLOT(OnShowProperties()));
+
+    mReturn = new QAction(tr("Go Up"), this);
+    mReturn->setMenuRole(QAction::NoRole);
+    mReturn->setShortcut(QKeySequence(Qt::Key_Backspace));
+    connect(mReturn, SIGNAL(triggered()), this, SLOT(OnReturn()));
 }
 
 FolderController::~FolderController() {
@@ -133,13 +149,13 @@ void FolderController::SetCurrentPath(QString path) throw (InvalidUriException, 
     mFolderView->addAction(mPaste);
     mFolderView->addAction(mRemove);
     mFolderView->addAction(mProperties);
+    mFolderView->addAction(mReturn);
 
     UpdateWidgetActions();
     connect(mFolderView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &FolderController::UpdateWidgetActions);
 }
 
 void FolderController::UpdateWidgetActions() {
-    qDebug() << "FileManager: Item mimes " << mCurrentModel->mimeTypes();
 
     bool filesSelected = !mFolderView->selectionModel()->selection().empty();
     mOpen->setVisible(filesSelected);
@@ -149,8 +165,15 @@ void FolderController::UpdateWidgetActions() {
 
     bool isReadOnly = mCurrentModel->isReadOnly();
     mCut->setDisabled(isReadOnly);
-    mPaste->setDisabled(isReadOnly);
     mRemove->setDisabled(isReadOnly);
+
+    QClipboard *clipboard = QApplication::clipboard();
+
+    const QMimeData *data = clipboard->mimeData();
+    if (data->hasUrls()) {
+        qDebug() << "FileManager: Clipboard data: " << data->urls();
+        mPaste->setDisabled(isReadOnly);
+    }
 
 }
 
@@ -195,6 +218,8 @@ void FolderController::BuildFSView(QString name) {
     } catch (std::logic_error &ex) {
         qWarning() << "FileManager: " << ex.what();
     }
+
+    connect(mFolderView, &QAbstractItemView::doubleClicked, this, &FolderController::OnOpen);
 }
 
 QFileSystemModel* FolderController::GetModel() const {
@@ -215,14 +240,22 @@ void FolderController::OnOpen() {
     if (selection.count() == 1) {
         if (mCurrentModel->isDir(selection.first()))
             mFolderView->setRootIndex(selection.first());
-        else
-            qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " open files not supported.";
+        else {
+            bool fail = !QDesktopServices::openUrl(QUrl::fromLocalFile(mCurrentModel->filePath(selection.first())));
+
+            if (fail) {
+
+                //                ChoseApplicationController *chooser = new ChoseApplicationController(mCurrentModel->mimeTypes(selection.first()).first());
+                qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " open unknown files not supported yet.";
+            }
+        }
     }
 
     if (selection.count() > 1) {
         qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " open multiple items not supported.";
         return;
     }
+    qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " no items selected.";
 }
 
 void FolderController::OnNew() {
@@ -230,21 +263,67 @@ void FolderController::OnNew() {
 }
 
 void FolderController::OnCopy() {
-    qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " not implemented yet.";
+    // Fetch selected files
+    QList<QUrl> urls;
+    QModelIndexList selection = mFolderView->selectionModel()->selectedIndexes();
+
+    foreach(QModelIndex modelIndex, selection) {
+        urls << QUrl::fromUserInput(mCurrentModel->filePath(modelIndex));
+    }
+
+
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->clear();
+    QMimeData *data = new QMimeData();
+    data->setUrls(urls);
+    clipboard->setMimeData(data);
+    qDebug() << "FileManager: Files copied to clipboard: " << urls;
+    mCutFlag = false;
 }
 
 void FolderController::OnCut() {
-    qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " not implemented yet.";
+    OnCopy();
+    mCutFlag = true;
 }
 
 void FolderController::OnPaste() {
-    qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " not implemented yet.";
+    qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " not fully implemented yet.";
+    QClipboard *clipboard = QApplication::clipboard();
+
+    const QMimeData *data = clipboard->mimeData();
+    if (data->hasUrls()) {
+        qDebug() << "FileManager: Clipboard data: " << data->urls();
+
+
+        QString currentPath = mCurrentModel->filePath(mFolderView->rootIndex());
+        qDebug() << "FileManager: Current path: " << currentPath;
+        CopyTask *task = new CopyTask(data->urls(), QUrl::fromUserInput(currentPath), this);
+        task->Start();
+    }
+
+    if (mCutFlag) { // Remove files on cut
+
+        foreach(QUrl url, data->urls()) {
+            QFile::remove(url.toLocalFile());
+        }
+        mCutFlag = false;
+    }
 }
 
 void FolderController::OnRemove() {
-    qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " not implemented yet.";
+    // Fetch selected files
+    QModelIndexList selection = mFolderView->selectionModel()->selectedIndexes();
+
+    foreach(QModelIndex modelIndex, selection) {
+        QFile::remove(mCurrentModel->filePath(modelIndex));
+    }
 }
 
 void FolderController::OnShowProperties() {
     qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " not implemented yet.";
+}
+
+void FolderController::OnReturn() {
+    QDir current = mCurrentModel->fileInfo(mFolderView->rootIndex()).dir();
+    mFolderView->setRootIndex(mCurrentModel->index(current.path()));
 }

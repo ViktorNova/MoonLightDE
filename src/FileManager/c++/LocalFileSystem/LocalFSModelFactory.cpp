@@ -37,6 +37,7 @@ LocalFSModelFactory::~LocalFSModelFactory() {
 QFileSystemModel * LocalFSModelFactory::GetModel(QString path) {
     QFileSystemModel *model = new QFileSystemModel();
     model->setRootPath(path);
+    model->setReadOnly(false);
     return model;
 }
 
@@ -53,4 +54,8 @@ void LocalFSModelFactory::RegisterService(us::ModuleContext *context) {
     ServiceProperties props2;
     props2["scheme"] = std::string("");
     context->RegisterService<IFileSystemModelFactory>(this, props2);
+}
+
+QList<QAction> LocalFSModelFactory::GetActions(QFileSystemModel * model) {
+//    QAction *copy = 
 }

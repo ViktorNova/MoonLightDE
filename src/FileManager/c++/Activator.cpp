@@ -21,9 +21,11 @@
 
 #include "FolderController.h"
 
-#include "LocalFSModelFactory.h"
+#include "LocalFileSystem/LocalFSModelFactory.h"
 #include "FileManager/IFileSystemModelFactory.h"
 #include "Views/BasicFolderViewFactory.h"
+
+#include "LocalFileSystem/CopyTask.h"
 
 #include <usModule.h>
 #include <usModuleContext.h>
@@ -46,12 +48,17 @@ private:
      */
     void Load(ModuleContext* context) {
         qDebug() << "FileManager: Loading.";
-
+        
         // Register services
         mLocalFSModelFactory.RegisterService(context);
         mBasicFolderViewFactory.RegisterService(context);
         mFolderController.SetCurrentPath("/home/alexis");
-        mFolderController.GetView()->show();
+        QWidget * ui = NULL;
+        ui = mFolderController.GetView();
+        if (ui != NULL) 
+            ui->show();
+        else 
+            qCritical() << "FileManager: Ui wasn\'t built ";
     }
 
     /**

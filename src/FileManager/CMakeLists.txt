@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Moonlight Desktop Environment.  If not, see <http://www.gnu.org/licenses/>.
 #
- 
+
 project(FileManager)
 
 ## --------------------------------------------------------------
@@ -49,6 +49,9 @@ include_directories(${CppMicroServices_INCLUDE_DIRS})
 ## LXQT -- depends on QT5XDG
 find_package(LXQT-QT5 REQUIRED )
 include(${LXQT_USE_FILE})
+
+find_package(QT5XDG)
+include(${QTXDG_USE_FILE})
 
 ## Inter-module dependencies
 set(${PROJECT_NAME}_DEPENDS )
@@ -84,4 +87,7 @@ target_link_libraries(moonlightDE-${PROJECT_NAME}
     Qt5::Gui
     Qt5::DBus
     Qt5::X11Extras
+
+    ${QTXDG_QT_LIBRARIES}
+    ${QTXDG_LIBRARIES}
 )

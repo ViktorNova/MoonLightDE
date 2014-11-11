@@ -33,8 +33,9 @@ public:
     LocalFSModelFactory();
     virtual ~LocalFSModelFactory();
 
-    QFileSystemModel * GetModel(QString path);
-    QStringList GetSupportedSchemes();
+    virtual QFileSystemModel * GetModel(QString path);
+    virtual QStringList GetSupportedSchemes();
+    virtual QList<QAction> GetActions(QFileSystemModel * model);
 protected:
     friend class Activator;
     void RegisterService(us::ModuleContext *context);

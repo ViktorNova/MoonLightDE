@@ -63,13 +63,16 @@ public slots:
     void UpdateWidgetActions();
     
     // File Operations
-    void OnOpen();
     void OnNew();
     void OnCopy();
     void OnCut();
     void OnPaste();
     void OnRemove();
     void OnShowProperties();
+    
+    // Navigation
+    void OnOpen();
+    void OnReturn();
     
 protected:
     /* Description: Build a model for the given scheme. The models are taken 
@@ -86,8 +89,9 @@ private:
     QAbstractItemView * mFolderView;
     QString mFolderViewName;
     
+    bool mCutFlag;
     // Default Actions
-    QAction *mOpen, *mNew, *mCopy, *mCut, *mPaste, *mRemove, *mProperties;
+    QAction *mOpen, *mNew, *mCopy, *mCut, *mPaste, *mRemove, *mProperties, *mReturn;
     QActionGroup *mFileOpsGroup;
 };
 

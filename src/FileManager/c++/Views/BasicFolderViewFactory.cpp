@@ -45,7 +45,7 @@ QAbstractItemView* BasicFolderViewFactory::GetView(QString name) {
         view->setUniformItemSizes(true);
         view->setWrapping(true);
 
-        view->setTextElideMode(Qt::ElideMiddle);
+//        view->setTextElideMode(Qt::ElideMiddle);
         view->setWordWrap(true);
         
         view->setMovement(QListView::Static);

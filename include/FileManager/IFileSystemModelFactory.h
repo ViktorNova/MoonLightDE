@@ -27,6 +27,8 @@
 
 #include <QString>
 #include <QFileSystemModel>
+#include <QList>
+#include <QAction>
 
 /* Base class for File System Model Factories, it should be used to expose then
  * as services.
@@ -48,6 +50,7 @@ public:
     }
     virtual QFileSystemModel * GetModel(QString path) = 0;
     virtual QStringList GetSupportedSchemes() = 0;
+    virtual QList<QAction> GetActions(QFileSystemModel * model) = 0;
 protected:
     friend class Activator;
     virtual void RegisterService(us::ModuleContext *context) = 0;
