@@ -30,12 +30,15 @@
 #include <QList>
 #include <QAction>
 
-/* Base class for File System Model Factories, it should be used to expose then
- * as services.
+
+/**
+ * This service exists for the propose of providing access to new file systems, 
+ * real (cifs, ftp) or virtual (Mi PC, networks://). It should not be used 
+ * directly istead use the <code>FileSystemService</code>.
  * 
+ * Realization specifications:
  * In order to ease the filtering you must set as service properties the 
- * "schemes" that the given implementation support.
- * By example:
+ * "schemes" that the given implementation support, by example:
  *  ServiceProperties props;
  *  props["scheme"] = std::string("file");
  *  context->RegisterService<FileSystemModelFactory>(myFSModelFactory, props);
@@ -43,6 +46,7 @@
  * If the model support several FS you must register the service several times
  * with different schemes.
  */
+
 class IFileSystemModelFactory {
 public:
 
@@ -50,7 +54,7 @@ public:
     }
     virtual QFileSystemModel * GetModel(QString path) = 0;
     virtual QStringList GetSupportedSchemes() = 0;
-    virtual QList<QAction> GetActions(QFileSystemModel * model) = 0;
+    
 protected:
     friend class Activator;
     virtual void RegisterService(us::ModuleContext *context) = 0;

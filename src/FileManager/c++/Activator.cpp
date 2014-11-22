@@ -27,6 +27,9 @@
 
 #include "LocalFileSystem/CopyTask.h"
 
+#include "FileManager/IFileSystemService.h"
+#include "FileSystemService/FileSystemServiceImpl.h"
+
 #include <usModule.h>
 #include <usModuleContext.h>
 #include <usModuleActivator.h>
@@ -48,16 +51,20 @@ private:
      */
     void Load(ModuleContext* context) {
         qDebug() << "FileManager: Loading.";
-        
+
         // Register services
+        m_FileSystemServiceImpl = new FileSystemServiceImpl();
+        ServiceProperties serviceProperties;
+        context->RegisterService<FileManager::IFileSystemService>(this, serviceProperties);
+
         mLocalFSModelFactory.RegisterService(context);
         mBasicFolderViewFactory.RegisterService(context);
         mFolderController.SetCurrentPath("/home/alexis");
         QWidget * ui = NULL;
         ui = mFolderController.GetView();
-        if (ui != NULL) 
+        if (ui != NULL)
             ui->show();
-        else 
+        else
             qCritical() << "FileManager: Ui wasn\'t built ";
     }
 
@@ -73,5 +80,7 @@ private:
     FolderController mFolderController;
     LocalFSModelFactory mLocalFSModelFactory;
     BasicFolderViewFactory mBasicFolderViewFactory;
+
+    FileSystemServiceImpl * m_FileSystemServiceImpl;
 };
 US_EXPORT_MODULE_ACTIVATOR(FileManager, Activator)
