@@ -19,33 +19,35 @@
  * along with Moonlight Desktop Environment. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ABSTRACTFILESYSTEMMODEL_H
-#define	ABSTRACTFILESYSTEMMODEL_H
+#ifndef NAVIGATIONSERVICEIMPL_H
+#define	NAVIGATIONSERVICEIMPL_H
 
-#include <QAbstractItemModel>
+#include <NavigationService/INavigationService.h>
+#include <NavigationService/IItemModelService.h>
 
-namespace FileManager {
+#include <usServiceTracker.h>
+#include <QReadWriteLock>
 
-    /**
-     * Base class for FileSystemModel implementations.
-     */
-    class AbstractFileSystemModel : public QAbstractItemModel {
-    public:
-        virtual QModelIndex index(QString& const_path) = 0;
+using namespace NavigationService;
 
-        virtual QModelIndex index(QString& const_path, QVariant& const_data) = 0;
+class NavigationServiceImpl : public INavigationService {
+public:
+    NavigationServiceImpl();
+    virtual ~NavigationServiceImpl();
 
-        virtual QFileIconProvider* iconProvider() = 0;
+    virtual IItemModelService* model(const QString& scheme);
 
-        virtual QFileInfo fileInfo(QModelIndex const_index) = 0;
+    virtual IItemModelService* root();
 
-        virtual QDir dir(QModelIndex& const_index) = 0;
+    std::size_t addModel(const us::ServiceReference<IItemModelService> &ref, IItemModelService * service);
+    std::size_t removeModel(const us::ServiceReference<IItemModelService> &ref);
 
-        virtual QFile file(QModelIndex& const_index) = 0;
 
-        virtual void setIconProvider(QFileIconProvider* provider) = 0;
-    };
-}
+private:
+    QReadWriteLock m_Lock;
+    std::map<us::ServiceReference<IItemModelService>, IItemModelService *> m_ItemModels;
+    us::ServiceReference<IItemModelService> m_Root;
+};
 
-Q_DECLARE_INTERFACE(FileManager::AbstractFileSystemModel, "org.moonlightde.FileManager.AbstractFileSystemModel/1.0")
-#endif	/* ABSTRACTFILESYSTEMMODEL_H */
+#endif	/* NAVIGATIONSERVICEIMPL_H */
+

@@ -22,7 +22,7 @@
 #include "FolderController.h"
 #include "ChoseApplicationController.h"
 
-#include "FileManager/IFileSystemModelFactory.h"
+
 #include "FileManager/IFolderViewFactory.h"
 #include "LocalFileSystem/CopyTask.h"
 
@@ -51,6 +51,9 @@
 FolderController::FolderController() : mView(NULL), mCurrentModel(NULL), mFolderView(NULL) {
     mView = new QWidget();
 
+    m_NavigationServiceTracker = new us::ServiceTracker<NavigationService::INavigationService>(us::GetModuleContext());
+    m_NavigationServiceTracker->Open();
+    
     mOpen = new QAction(tr("Open"), this);
     mOpen->setShortcut(QKeySequence(Qt::Key_Return));
     connect(mOpen, SIGNAL(triggered()), this, SLOT(OnOpen()));
@@ -119,15 +122,18 @@ void FolderController::SetCurrentPath(QString path) throw (InvalidUriException, 
         return;
     }
 
-    if (!mCurrentModelSupportedSchemes.contains(url.scheme()))
-        // Prepare a suitable model for the given path
-        BuildFSModel(url.scheme());
+    //    if (!mCurrentModelSupportedSchemes.contains(url.scheme()))
+    //        // Prepare a suitable model for the given path
+    //        BuildFSModel(url.scheme());
+
+    NavigationService::INavigationService *service = m_NavigationServiceTracker->GetService();
+    if (service)
+        mCurrentModel = service->model(url.scheme());
 
     if (!mCurrentModel) {
         qWarning() << "FileManager: FSModel wasn't created.";
         return;
     }
-    mCurrentModel->setRootPath(path);
 
     if (!mFolderView)
         BuildFSView("icon");
@@ -136,7 +142,7 @@ void FolderController::SetCurrentPath(QString path) throw (InvalidUriException, 
         qWarning() << "FileManager: FolderView wasn't created.";
         return;
     }
-    mFolderView->setModel(mCurrentModel);
+    mFolderView->setModel(mCurrentModel->effectiveModel());
     mFolderView->setRootIndex(mCurrentModel->index(path));
     mCurrentPath = path;
 
@@ -163,7 +169,7 @@ void FolderController::UpdateWidgetActions() {
 
     mNew->setVisible(!filesSelected);
 
-    bool isReadOnly = mCurrentModel->isReadOnly();
+    bool isReadOnly = /*mCurrentModel->isReadOnly()*/ false;
     mCut->setDisabled(isReadOnly);
     mRemove->setDisabled(isReadOnly);
 
@@ -179,23 +185,22 @@ void FolderController::UpdateWidgetActions() {
 
 void FolderController::BuildFSModel(QString scheme) {
     US_USE_NAMESPACE
-
-    ModuleContext *context = GetModuleContext();
-    try {
-        std::vector<ServiceReference<IFileSystemModelFactory> > refs =
-                context->GetServiceReferences<IFileSystemModelFactory>("(scheme=" + scheme.toStdString() + ")");
-
-        if (!refs.empty()) {
-            IFileSystemModelFactory * factory = context->GetService<IFileSystemModelFactory>(refs.front());
-
-            if (factory) {
-                mCurrentModel = factory->GetModel(scheme);
-                mCurrentModelSupportedSchemes = factory->GetSupportedSchemes();
-            }
-        }
-    } catch (std::logic_error &ex) {
-        qWarning() << "FileManager: " << ex.what();
-    }
+    //    ModuleContext *context = GetModuleContext();
+    //    try {
+    //        std::vector<ServiceReference<IFileSystemModelFactory> > refs =
+    //                context->GetServiceReferences<IFileSystemModelFactory>("(scheme=" + scheme.toStdString() + ")");
+    //
+    //        if (!refs.empty()) {
+    //            IFileSystemModelFactory * factory = context->GetService<IFileSystemModelFactory>(refs.front());
+    //
+    //            if (factory) {
+    //                mCurrentModel = factory->GetModel(scheme);
+    //                mCurrentModelSupportedSchemes = factory->GetSupportedSchemes();
+    //            }
+    //        }
+    //    } catch (std::logic_error &ex) {
+    //        qWarning() << "FileManager: " << ex.what();
+    //    }
 
 }
 
@@ -222,8 +227,8 @@ void FolderController::BuildFSView(QString name) {
     connect(mFolderView, &QAbstractItemView::doubleClicked, this, &FolderController::OnOpen);
 }
 
-QFileSystemModel* FolderController::GetModel() const {
-    return mCurrentModel;
+QAbstractItemModel* FolderController::GetModel() const {
+    return mCurrentModel->effectiveModel();
 }
 
 QWidget* FolderController::GetView() const {
@@ -237,19 +242,19 @@ void FolderController::OnOpen() {
     Q_ASSERT(mFolderView != NULL);
     QModelIndexList selection = mFolderView->selectionModel()->selectedIndexes();
 
-    if (selection.count() == 1) {
-        if (mCurrentModel->isDir(selection.first()))
-            mFolderView->setRootIndex(selection.first());
-        else {
-            bool fail = !QDesktopServices::openUrl(QUrl::fromLocalFile(mCurrentModel->filePath(selection.first())));
-
-            if (fail) {
-
-                //                ChoseApplicationController *chooser = new ChoseApplicationController(mCurrentModel->mimeTypes(selection.first()).first());
-                qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " open unknown files not supported yet.";
-            }
-        }
-    }
+    //    if (selection.count() == 1) {
+    //        if (mCurrentModel->fisDir(selection.first()))
+    //            mFolderView->setRootIndex(selection.first());
+    //        else {
+    //            bool fail = !QDesktopServices::openUrl(QUrl::fromLocalFile(mCurrentModel->filePath(selection.first())));
+    //
+    //            if (fail) {
+    //
+    //                //                ChoseApplicationController *chooser = new ChoseApplicationController(mCurrentModel->mimeTypes(selection.first()).first());
+    //                qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " open unknown files not supported yet.";
+    //            }
+    //        }
+    //    }
 
     if (selection.count() > 1) {
         qDebug() << "FileManager: " << __PRETTY_FUNCTION__ << " open multiple items not supported.";
@@ -267,9 +272,9 @@ void FolderController::OnCopy() {
     QList<QUrl> urls;
     QModelIndexList selection = mFolderView->selectionModel()->selectedIndexes();
 
-    foreach(QModelIndex modelIndex, selection) {
-        urls << QUrl::fromUserInput(mCurrentModel->filePath(modelIndex));
-    }
+    //    foreach(QModelIndex modelIndex, selection) {
+    //        urls << QUrl::fromUserInput(mCurrentModel->filePath(modelIndex));
+    //    }
 
 
     QClipboard *clipboard = QApplication::clipboard();
@@ -295,7 +300,7 @@ void FolderController::OnPaste() {
         qDebug() << "FileManager: Clipboard data: " << data->urls();
 
 
-        QString currentPath = mCurrentModel->filePath(mFolderView->rootIndex());
+        QString currentPath = mCurrentModel->path(mFolderView->rootIndex());
         qDebug() << "FileManager: Current path: " << currentPath;
         CopyTask *task = new CopyTask(data->urls(), QUrl::fromUserInput(currentPath), this);
         task->Start();
@@ -315,7 +320,7 @@ void FolderController::OnRemove() {
     QModelIndexList selection = mFolderView->selectionModel()->selectedIndexes();
 
     foreach(QModelIndex modelIndex, selection) {
-        QFile::remove(mCurrentModel->filePath(modelIndex));
+        QFile::remove(mCurrentModel->path(modelIndex));
     }
 }
 
@@ -324,6 +329,10 @@ void FolderController::OnShowProperties() {
 }
 
 void FolderController::OnReturn() {
-    QDir current = mCurrentModel->fileInfo(mFolderView->rootIndex()).dir();
-    mFolderView->setRootIndex(mCurrentModel->index(current.path()));
+//    FileManager::IFileSystemModel * fsModel = dynamic_cast<FileManager::IFileSystemModel *>(mCurrentModel);
+//    if (fsModel) {
+//        QDir current = fsModel->fileInfo(mFolderView->rootIndex()).dir();
+//
+//        mFolderView->setRootIndex(mCurrentModel->index(current.path()));
+//    }
 }

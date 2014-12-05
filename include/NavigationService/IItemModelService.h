@@ -19,8 +19,8 @@
  * along with Moonlight Desktop Environment. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IFILESYSTEMSERVICE_H
-#define	IFILESYSTEMSERVICE_H
+#ifndef IITEMMODELSERVICE_H
+#define	IITEMMODELSERVICE_H
 
 #include <usServiceInterface.h>
 
@@ -32,29 +32,13 @@
 #include <QFileIconProvider>
 #include <QAbstractItemModel>
 
-namespace FileManager {
-    /* Description: Provides a common interface to access the different file 
-     *  systems and hides the complexity of handling their implementations.
-     * 
-     * Example:
-     *   #include <usModuleContext.h>
-     *   #include <usServiceTracker.h>
-     *   #include <usGetModuleContext.h>
-     *   ... 
-     * 
-     *   ModuleContext *context = GetModuleContext();
-     *   ServiceTracker<IFileSystemService> * tracker = new ServiceTracker<IFileSystemService>(context);
-     *   tracker->Open();
-     * 
-     *   IFileSystemService* fs = tracker->GetService();
-     *   fs->index("smb://localhost/cool stuff");
-     *   ...
-     * 
-     *   tracker->Close()
-     *   delete tracker;
-     *   
+namespace NavigationService {
+
+    /**
+     * Provides a common interface to access the different ItemModels. Allways 
+     * resolv it using the <code>NavigationService</code>.
      */
-    class IFileSystemService : public QAbstractItemModel {
+    class IItemModelService /*: public QAbstractItemModel*/ {
     public:
 
         /**
@@ -85,40 +69,26 @@ namespace FileManager {
          */
         virtual QModelIndex index(const QString &path, const QVariant &data) = 0;
 
-        /**
-         * Fetch the information correspoding to the given index. This may point
-         * to a "virtual" file or directory.
-         */
-        virtual QFileInfo fileInfo(const QModelIndex &index) const = 0;
 
         /**
-         * Get a <code>QDir</code> like handler for the given index. This may point
-         * to a "virtual" directory.
+         * Resolves the path to the given index.
+         * @param index
+         * @return index path.
          */
-        virtual QDir dir(const QModelIndex &index) const = 0;
-
+        virtual QString path(const QModelIndex& index) const = 0;
+        
         /**
-         * Get a <code>QFile</code> like handler for the given index. This may point
-         * to a "virtual" file.
+         * Allows the creation of wrappers for existent implementations such as
+         * QFileSysteModel.
+         * @return the effective Item Model behind this interface.
          */
-        virtual QFile* file(const QModelIndex &index) const = 0;
-
-        /**
-         * Fetch the <code>QFileIconProvider</code> registered or <code>NULL</code>.
-         */
-        virtual QFileIconProvider * iconProvider() const = 0;
-
-        /**
-         * Set the <code>QFileIconProvider</code> to be used while presenting the
-         * files.
-         */
-        virtual void setIconProvider(QFileIconProvider * provider) = 0;
+        virtual QAbstractItemModel * effectiveModel() = 0;
     };
 }
 
-Q_DECLARE_INTERFACE(FileManager::IFileSystemService, "org.moonlightde.FileManager.IFileSystemService/1.0")
-US_DECLARE_SERVICE_INTERFACE(FileManager::IFileSystemService, "org.moonlightde.FileManager.IFileSystemService/1.0")
+Q_DECLARE_INTERFACE(NavigationService::IItemModelService, "org.moonlightde.NavigationService.IItemModelService/1.0")
+US_DECLARE_SERVICE_INTERFACE(NavigationService::IItemModelService, "org.moonlightde.NavigationService.IItemModelService/1.0")
 
-        
-#endif	/* IFILESYSTEMSERVICE_H */
+
+#endif	/* IITEMMODELSERVICE_H */
 

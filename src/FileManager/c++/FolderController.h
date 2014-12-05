@@ -25,11 +25,16 @@
 #include "Exceptions/InvalidUriException.h"
 #include "Exceptions/UriNotAvailableException.h"
 
+#include <NavigationService/INavigationService.h>
+
+#include <usServiceTracker.h>
+
 #include <QUrl>
 #include <QString>
 #include <QWidget>
 #include <QAction>
 #include <QObject>
+#include <QPointer>
 #include <QActionGroup>
 #include <QAbstractItemView>
 #include <QFileSystemModel>
@@ -51,7 +56,7 @@ public:
      */
     void SetCurrentPath(QString path) throw (InvalidUriException, UriNotAvailableException);
 
-    QFileSystemModel* GetModel() const;
+    QAbstractItemModel * GetModel() const;
 
     /* Description: Returns a widget with the current folder view or a message
      *  for the user if the Folder view it's not ready or if an error ocurred.
@@ -84,10 +89,11 @@ protected:
 private:
     QUrl mCurrentPath;
     QWidget * mView;
-    QFileSystemModel * mCurrentModel;
+    NavigationService::IItemModelService * mCurrentModel;
     QStringList mCurrentModelSupportedSchemes;
     QAbstractItemView * mFolderView;
     QString mFolderViewName;
+    us::ServiceTracker<NavigationService::INavigationService> * m_NavigationServiceTracker;
     
     bool mCutFlag;
     // Default Actions

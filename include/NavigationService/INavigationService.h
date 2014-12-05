@@ -37,7 +37,7 @@
 #include <QFileIconProvider>
 #include <QAbstractItemModel>
 
-namespace FileManager {
+namespace NavigationService {
 
     /* Description: Allows to resolve the right ItemModel to handle a given
      *  scheme.
@@ -71,35 +71,20 @@ namespace FileManager {
          * @param scheme
          * @return an IItemModelService or NULL
          */
-        IItemModelService * model(const QString& scheme);
+        virtual IItemModelService * model(const QString& scheme) = 0;
 
         /**
          * Resolves the root model (PC) .
          * @param scheme
          * @return an IItemModelService or NULL
          */
+        virtual IItemModelService * root() = 0;
 
-        IItemModelService * root();
-
-
-        /**
-         * Resolves the path to the given index.
-         * @param index
-         * @return index path.
-         */
-        virtual QString path(const QModelIndex& index) const = 0;
-
-    protected:
-        friend class ItemModelServicesMonitor;
-        std::size_t addModel(const us::ServiceReference<FileManager::IItemModelService> &ref, FileManager::IItemModelService * service);
-        std::size_t removeModel(const us::ServiceReference<FileManager::IItemModelService> &ref);
-
-        std::map<us::ServiceReference<FileManager::IItemModelService>, FileManager::IItemModelService *> m_ItemModels;
     };
 }
 
-Q_DECLARE_INTERFACE(FileManager::INavigationService, "org.moonlightde.FileManager.INavigationService/1.0")
-US_DECLARE_SERVICE_INTERFACE(FileManager::INavigationService, "org.moonlightde.FileManager.INavigationService/1.0")
+Q_DECLARE_INTERFACE(NavigationService::INavigationService, "org.moonlightde.NavigationService.INavigationService/1.0")
+US_DECLARE_SERVICE_INTERFACE(NavigationService::INavigationService, "org.moonlightde.NavigationService.INavigationService/1.0")
 
 
 #endif	/* IFILESYSTEMSERVICE_H */

@@ -19,27 +19,19 @@
  * along with Moonlight Desktop Environment. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FILESYSTEMMDOEL_H
-#define	FILESYSTEMMDOEL_H
+#ifndef IFILESYSTEMMDOEL_H
+#define	IFILESYSTEMMDOEL_H
 
-#include <QAbstractItemModel>
+#include "IItemModelService.h"
 
-#include "INavigationService.h"
-
-namespace FileManager {
+namespace NavigationService {
 
     /**
      * Provides a common interface to access the different file systems. Allways
      * resolv it using <code>NavigationService</code>
      */
-    class FileSystemModel : public IModelService {
+    class IFileSystemModel : public IItemModelService {
     public:
-        virtual QModelIndex index(const QString& path) = 0;
-
-        virtual QModelIndex index(const QString& path, QVariant& const_data) = 0;
-
-        virtual const QString path(const QModelIndex& index) = 0;
-
         /**
          * Resolve the path of the give resource maped to the local file system.
          * @param index
@@ -67,5 +59,5 @@ namespace FileManager {
     };
 }
 
-Q_DECLARE_INTERFACE(FileManager::FileSystemModel, "org.moonlightde.FileManager.FileSystemModel/1.0")
-#endif	/* FILESYSTEMMDOEL_H */
+Q_DECLARE_INTERFACE(NavigationService::IFileSystemModel, "org.moonlightde.NavigationService.IFileSystemModel/1.0")
+#endif	/* IFILESYSTEMMDOEL_H */

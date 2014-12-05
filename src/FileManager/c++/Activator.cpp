@@ -21,14 +21,9 @@
 
 #include "FolderController.h"
 
-#include "LocalFileSystem/LocalFSModelFactory.h"
-#include "FileManager/IFileSystemModelFactory.h"
 #include "Views/BasicFolderViewFactory.h"
 
-#include "LocalFileSystem/CopyTask.h"
-
-#include "FileManager/IFileSystemService.h"
-#include "FileSystemService/FileSystemServiceImpl.h"
+#include <NavigationService/IItemModelService.h>
 
 #include <usModule.h>
 #include <usModuleContext.h>
@@ -52,14 +47,9 @@ private:
     void Load(ModuleContext* context) {
         qDebug() << "FileManager: Loading.";
 
-        // Register services
-        m_FileSystemServiceImpl = new FileSystemServiceImpl();
-        ServiceProperties serviceProperties;
-        context->RegisterService<FileManager::IFileSystemService>(this, serviceProperties);
 
-        mLocalFSModelFactory.RegisterService(context);
         mBasicFolderViewFactory.RegisterService(context);
-        mFolderController.SetCurrentPath("/home/alexis");
+        mFolderController.SetCurrentPath("/");
         QWidget * ui = NULL;
         ui = mFolderController.GetView();
         if (ui != NULL)
@@ -75,12 +65,12 @@ private:
      */
     void Unload(ModuleContext* context) {
         qDebug() << "FileManager: Unloading.";
+//        m_Tracker.Close();
+
     }
 
     FolderController mFolderController;
-    LocalFSModelFactory mLocalFSModelFactory;
     BasicFolderViewFactory mBasicFolderViewFactory;
-
-    FileSystemServiceImpl * m_FileSystemServiceImpl;
 };
+
 US_EXPORT_MODULE_ACTIVATOR(FileManager, Activator)
