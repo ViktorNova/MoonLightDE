@@ -73,7 +73,7 @@ public:
 
         // Register services
         ServiceProperties localFSProperties;
-        localFSProperties["role"] = std::string("fs-plase");
+        localFSProperties["role"] = std::string("fs-extension");
         localFSProperties["schemes"] = std::string("file");
         context->RegisterService<IItemModelService>(&m_LocalFileSystem, localFSProperties);
 
