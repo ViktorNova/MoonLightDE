@@ -104,6 +104,9 @@ endif(TEST_MODE)
 #add_subdirectory(src/file-manager)
 #add_subdirectory(src/runner)
 
+add_subdirectory(src/FileManager)
+add_subdirectory(src/NavigationService)
+
 add_subdirectory(src/remote)
 
 ## --------------------------------------------------------------
