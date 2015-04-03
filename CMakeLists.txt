@@ -78,20 +78,20 @@ add_subdirectory(src/presentation_panel_datetime)
 add_subdirectory(src/presentation_panel_quicklaunchers)
 
 add_subdirectory(src/model_filesystem_gvfs)
-#add_subdirectory(src/panel-clasic-menu)
-#add_subdirectory(src/panel-dash_xdg)
+add_subdirectory(src/panel-clasic-menu)
+add_subdirectory(src/panel-dash_xdg)
 #
-#add_subdirectory(src/panel-menu)
+add_subdirectory(src/panel-menu)
 
-#add_subdirectory(src/panel-quicklauchers)
+add_subdirectory(src/panel-quicklauchers)
 #
-#add_subdirectory(src/actions_registry)
-#add_subdirectory(src/keyboard-shortcuts)
-#add_subdirectory(src/notifications)
-#add_subdirectory(src/file-manager)
-#add_subdirectory(src/runner)
+add_subdirectory(src/actions_registry)
+add_subdirectory(src/keyboard-shortcuts)
+add_subdirectory(src/notifications)
+add_subdirectory(src/file-manager)
+add_subdirectory(src/runner)
 
-#add_subdirectory(src/remote)
+add_subdirectory(src/remote)
 
 ## --------------------------------------------------------------
 ## Third Parthy
@@ -115,7 +115,7 @@ SET(CPACK_PACKAGE_INSTALL_DIRECTORY "CMake ${CMake_VERSION_MAJOR}.${CMake_VERSIO
 
 SET(CPACK_SET_DESTDIR "ON")
 
-## Debian especific packing instructions
+## Debian specific packing instructions
 SET(CPACK_PACKAGE_CONTACT "MoonLightDE Mail List <moonlightde@googlegroups.com>")
 SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libcppmicroservices" "qt5-defaults" "libqt5x11extras5")
 
